@@ -1,0 +1,45 @@
+* {
+  box-sizing: border-box;
+}
+body {
+  background-color: gray;
+}
+.img-zoom-container {
+  position: absolute;
+  width: 500px;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  cursor: crosshair;
+  img {
+    width: 100%;
+    filter: brightness(0.5);
+  }
+  .img-zoom-result {
+    border: 4px solid white;
+    border-radius: 5px;
+    width: 270px;
+    height: 270px;
+    transition: transform 300ms;
+    position: absolute;
+    top: 22%;
+    right: -300px;
+    transform: translateX(-200px) scale(0);
+    &.open {
+      transform: translateX(0) scale(1);
+    }
+  }
+  .img-zoom-lens {
+    position: absolute;
+    border: 4px solid white;
+    border-radius: 5px;
+    width: 100px;
+    height: 100px;
+    z-index: 111;
+    opacity: 0;
+    transition: opacity 300ms;
+    &.open {
+      opacity: 1;
+    }
+  }
+}
