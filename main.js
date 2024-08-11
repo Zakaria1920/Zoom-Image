@@ -11,7 +11,7 @@ function imageZoom(imgID, resultID) {
   cx = result.offsetWidth / lens.offsetWidth;
   cy = result.offsetHeight / lens.offsetHeight;
   /* Set background properties for the result DIV */
-  result.style.backgroundImage = `url("${img.src}")`;
+  result.style.backgroundImage = `url("./${img.src}")`;
   result.style.backgroundSize = `${img.width * cx}px ${img.height * cy}px`;
   lens.style.backgroundImage = `url("${img.src}")`;
   lens.style.backgroundSize = `${img.width}px ${img.height}px`;
