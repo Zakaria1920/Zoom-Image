@@ -1,6 +1,13 @@
-function imageZoom(imgID, resultID) {
-  var img, lens, result, cx, cy;
+function imageZoom(imgID, resultContID, resultID) {
+  var img,
+    lens,
+    resultCont,
+    result,
+    cx,
+    cy,
+    scale = 1;
   img = document.getElementById(imgID);
+  resultCont = document.getElementById(resultContID);
   result = document.getElementById(resultID);
   /* Create lens: */
   lens = document.createElement("DIV");
@@ -11,25 +18,23 @@ function imageZoom(imgID, resultID) {
   cx = result.offsetWidth / lens.offsetWidth;
   cy = result.offsetHeight / lens.offsetHeight;
   /* Set background properties for the result DIV */
-  result.style.backgroundImage = `url("./${img.src}")`;
+  result.style.backgroundImage = `url("${img.src}")`;
   result.style.backgroundSize = `${img.width * cx}px ${img.height * cy}px`;
   lens.style.backgroundImage = `url("${img.src}")`;
   lens.style.backgroundSize = `${img.width}px ${img.height}px`;
   // Hide lens and result
   lens.addEventListener("mouseleave", () => {
     lens.classList.remove("open");
-    result.classList.remove("open");
+    resultCont.classList.remove("open");
+    removeEventListener("wheel", zoom);
   });
   /* Execute a function when someone moves the cursor over the image, or the lens: */
   lens.addEventListener("mousemove", moveLens);
   img.addEventListener("mousemove", moveLens);
-  /* And also for touch screens: */
-  lens.addEventListener("touchmove", moveLens);
-  img.addEventListener("touchmove", moveLens);
   function moveLens(e) {
     // Show lens and result
     lens.classList.add("open");
-    result.classList.add("open");
+    resultCont.classList.add("open");
     var pos, x, y;
     /* Prevent any other actions that may occur when moving over the image */
     e.preventDefault();
@@ -57,6 +62,8 @@ function imageZoom(imgID, resultID) {
     /* Display what the lens "sees": */
     result.style.backgroundPosition = `-${x * cx}px -${y * cy}px`;
     lens.style.backgroundPosition = `-${x}px -${y}px`;
+    // Add wheel event to zoom in result
+    window.addEventListener("wheel", zoom);
   }
   function getCursorPos(e) {
     var a,
@@ -73,5 +80,18 @@ function imageZoom(imgID, resultID) {
     y = y - window.scrollY;
     return { x: x, y: y };
   }
+  function zoom(event) {
+    function animation() {
+      scale += event.deltaY * -0.001;
+      // Restrict scale
+      scale = Math.min(Math.max(1, scale), 3);
+      // Apply scale transform
+      if (scale > 1 && scale < 3) {
+        result.style.transform = `scale(${scale})`;
+        requestAnimationFrame(animation);
+      }
+    }
+    animation();
+  }
 }
-imageZoom("myimage", "myresult");
+imageZoom("myimage", "myresultCont", "myresult");

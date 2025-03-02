@@ -15,7 +15,7 @@ body {
     width: 100%;
     filter: brightness(0.5);
   }
-  .img-zoom-result {
+  .img-zoom-result-cont {
     border: 4px solid white;
     border-radius: 5px;
     width: 270px;
@@ -25,8 +25,17 @@ body {
     top: 22%;
     right: -300px;
     transform: translateX(-200px) scale(0);
+    overflow: hidden;
     &.open {
       transform: translateX(0) scale(1);
+    }
+    .result {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      left: 0;
+      top: 0;
+      /* transition: 0.3s transform; */
     }
   }
   .img-zoom-lens {
