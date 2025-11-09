@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!-- <!DOCTYPE html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
@@ -15,4 +15,70 @@
     </div>
     <script src="main.js"></script>
   </body>
+</html> -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Enemy Patrol with Generator</title>
+  <style>
+    #game-area {
+      position: relative;
+      width: 500px;
+      height: 100px;
+      background-color: #eee;
+      margin: 50px auto;
+      border: 2px solid #ccc;
+    }
+    .enemy {
+      position: absolute;
+      width: 50px;
+      height: 50px;
+      background-color: crimson;
+      top: 25px;
+      left: 0;
+      transition: left 0.5s linear;
+    }
+  </style>
+</head>
+<body>
+
+<div id="game-area">
+  <div class="enemy" id="enemy"></div>
+</div>
+
+<script>
+  const enemy = document.getElementById("enemy");
+
+  function wait(ms) {
+    return new Promise(resolve => setTimeout(resolve, ms));
+  }
+
+  // Generator to control movement
+  function* patrol() {
+    const leftPos = 0;
+    const rightPos = 450;
+    while (true) {
+      // Move right
+      enemy.style.left = rightPos + "px";
+      yield wait(1000);
+
+      // Move left
+      enemy.style.left = leftPos + "px";
+      yield wait(1000);
+    }
+  }
+
+  // Run the generator
+  async function run(generator) {
+    const gen = generator();
+    for await (const step of gen) {
+      await step;
+    }
+  }
+
+  run(patrol);
+</script>
+
+</body>
 </html>
